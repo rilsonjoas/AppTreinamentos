@@ -8,7 +8,7 @@ public class Dieta {
     private Objetivo objetivo;
     private int caloriasDiarias;
     private Map<String, Double> macronutrientes;
-    private List<Refeicao> refeicoes;
+    private ArrayList<Refeicao> refeicoes;
     private Usuario usuario;
 
     public enum Objetivo {
@@ -66,7 +66,7 @@ public class Dieta {
         return refeicoes;
     }
 
-    public void setRefeicoes(List<Refeicao> refeicoes) {
+    public void setRefeicoes(ArrayList<Refeicao> refeicoes) {
         this.refeicoes = refeicoes;
     }
 

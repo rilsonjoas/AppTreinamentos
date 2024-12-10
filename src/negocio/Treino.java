@@ -25,11 +25,16 @@ public class Treino {
 
     // Construtor com parâmetros
     public Treino(String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.tipoDeTreino = tipoDeTreino;
         this.duracao = duracao;
         this.nivelDeDificuldade = nivelDeDificuldade;
         this.usuario = usuario;
+        this.exercicios = new ArrayList<>();
+        this.concluido = false;
+        this.caloriasQueimadas = 0.0;
+        this.progresso = 0.0;
     }
 
     // Getters e Setters

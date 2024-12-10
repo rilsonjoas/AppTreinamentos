@@ -22,7 +22,8 @@ public class Usuario {
     } //Quando pesquisei a melhor forma para armazenar o Sexo do Usuário, apareceu opção do Enum. Mudar p outro arquivo.
 
     public Usuario(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
-        this.nome = nome;
+        this.id = UUID.randomUUID();
+       this.nome = nome;
         this.email = email;
         this.dataNascimento = dataNascimento;
         this.sexo = sexo;
