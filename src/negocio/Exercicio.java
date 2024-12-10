@@ -1,3 +1,5 @@
+package negocio;
+
 import java.util.*;
 
 public class Exercicio {
@@ -23,6 +25,7 @@ public class Exercicio {
 
     // Construtor padrão
     public Exercicio() {
+        this.id = UUID.randomUUID();
         this.musculosTrabalhados = new ArrayList<>();
         this.concluido = false;
     }
@@ -122,7 +125,7 @@ public class Exercicio {
 
     @Override
     public String toString() {
-        return "Exercicio{" +
+        return "negocio.Exercicio{" +
                 "nome='" + nome + '\'' +
                 ", tipo=" + tipo +
                 ", tempo=" + tempo + " segundos" +

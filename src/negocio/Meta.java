@@ -1,3 +1,5 @@
+package negocio;
+
 import java.util.*;
 
 public class Meta {
@@ -15,6 +17,7 @@ public class Meta {
 
     // Construtor
     public Meta(String descricao, Tipo tipo, double valorAlvo, double progressoAtual, Date dataCriacao) {
+        this.id = UUID.randomUUID();
         this.descricao = descricao;
         this.tipo = tipo;
         this.valorAlvo = valorAlvo;

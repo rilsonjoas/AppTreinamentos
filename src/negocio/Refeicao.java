@@ -1,3 +1,5 @@
+package negocio;
+
 import java.util.*;
 
 public class Refeicao {

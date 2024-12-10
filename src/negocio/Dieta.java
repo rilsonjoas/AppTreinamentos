@@ -1,3 +1,5 @@
+package negocio;
+
 import java.util.*;
 
 public class Dieta {
@@ -14,6 +16,7 @@ public class Dieta {
     }
 
     public Dieta(String nome, Objetivo objetivo, int caloriasDiarias, Usuario usuario) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.objetivo = objetivo;
         this.caloriasDiarias = caloriasDiarias;

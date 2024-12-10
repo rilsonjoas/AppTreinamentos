@@ -1,3 +1,5 @@
+package negocio;
+
 import java.util.*;
 
 public class Usuario {
@@ -17,7 +19,7 @@ public class Usuario {
         MASCULINO,
         FEMININO,
         INDEFINIDO;
-    } //Quando pesquisei a melhor forma para armazenar o Sexo do Usuário, apareceu opção do Enum.
+    } //Quando pesquisei a melhor forma para armazenar o Sexo do Usuário, apareceu opção do Enum. Mudar p outro arquivo.
 
     public Usuario(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
         this.nome = nome;
@@ -217,7 +219,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
+        return "negocio.Usuario{" +
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", idade=" + getIdade() +

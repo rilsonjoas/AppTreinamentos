@@ -1,3 +1,5 @@
+package negocio;
+
 import java.util.*;
 
 public class Treino {
@@ -91,7 +93,7 @@ public class Treino {
         return concluido;
     }
 
-    // Métodos que precisaremos para a classe Treino
+    // Métodos que precisaremos para a classe negocio.Treino
     public void adicionarExercicio(Exercicio exercicio) {
         if (exercicio != null && !exercicios.contains(exercicio)) {
             exercicios.add(exercicio);
@@ -138,7 +140,7 @@ public class Treino {
 
     @Override
     public String toString() {
-        return "Treino{" +
+        return "negocio.Treino{" +
                 "nome='" + nome + '\'' +
                 ", tipoDeTreino='" + tipoDeTreino + '\'' +
                 ", duracao=" + duracao +
