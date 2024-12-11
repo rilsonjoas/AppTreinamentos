@@ -4,7 +4,6 @@ import excecoes.UsuarioNaoEncontradoException;
 import interfaces.IRepositorioUsuarios;
 import negocio.Usuario;
 
-import java.sql.Array;
 import java.util.UUID;
 
 public class RepositorioUsuariosArray implements IRepositorioUsuarios {
@@ -12,7 +11,7 @@ public class RepositorioUsuariosArray implements IRepositorioUsuarios {
     private Usuario[] usuarios;
     private int proximoIndice;
 
-    private static RepositorioUsuarios instanciaUnica;
+    private static RepositorioUsuariosArray instanciaUnica;
 
 
     public RepositorioUsuariosArray() {
@@ -20,9 +19,9 @@ public class RepositorioUsuariosArray implements IRepositorioUsuarios {
         proximoIndice = 0;
     }
 
-    public static RepositorioUsuarios getInstanciaUnica() {
+    public static RepositorioUsuariosArray getInstanciaUnica() {
         if (instanciaUnica == null) {
-            instanciaUnica = new RepositorioUsuarios();
+            instanciaUnica = new RepositorioUsuariosArray();
         }
         return instanciaUnica;
     }

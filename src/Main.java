@@ -42,8 +42,8 @@ public class Main {
         System.out.println("Progresso do treino: " + treinoMusculacao.getProgresso() + "%");
 
         // Criando um repositório de usuários
-        RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios();
-        repositorioUsuarios.adicionar(usuario);
+        RepositorioUsuariosArray repositorioUsuariosArray = new RepositorioUsuariosArray();
+        repositorioUsuariosArray.adicionar(usuario);
 
         //Exemplo de criação de refeição usando o Singleton
         Map<String, Double> macronutrientes = new HashMap<>();
