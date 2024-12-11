@@ -1,5 +1,6 @@
 package dados;
 
+import interfaces.IRepositorioUsuarios;
 import negocio.Usuario;
 import excecoes.UsuarioNaoEncontradoException;
 
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class RepositorioUsuarios {
+public class RepositorioUsuarios implements IRepositorioUsuarios {
     private Map<UUID, Usuario> usuarios;
 
     public RepositorioUsuarios() {
