@@ -3,6 +3,7 @@ package negocio;
 import java.util.*;
 
 public class Treino {
+    private static Treino instance; // Instância única para o padrão Singleton
     private UUID id;
     private String nome;
     private String tipoDeTreino;
@@ -14,30 +15,33 @@ public class Treino {
     private double progresso;
     private boolean concluido;
 
-    // Construtor default
-    public Treino() {
-        this.id = UUID.randomUUID();
-        this.exercicios = new ArrayList<>(); //Cria uma lista de exercícios associadas a este treino
-        this.concluido = false;
+    // Construtor privado para o padrão Singleton
+    private Treino() {
+        this.id = UUID.randomUUID(); // Gera um ID único
+        this.exercicios = new ArrayList<>();
+        this.concluido = false; // Define o treino como não concluído inicialmente
         this.caloriasQueimadas = 0.0;
         this.progresso = 0.0;
     }
 
-    // Construtor com parâmetros
-    public Treino(String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario) {
-        this.id = UUID.randomUUID();
+    // Método para obter a instância única do treino no padrão Singleton
+    public static Treino getInstance() {
+        if (instance == null) {
+            instance = new Treino();
+        }
+        return instance;
+    }
+
+    // Método para inicializar o treino com parâmetros
+    public void inicializar(String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario) {
         this.nome = nome;
         this.tipoDeTreino = tipoDeTreino;
         this.duracao = duracao;
         this.nivelDeDificuldade = nivelDeDificuldade;
         this.usuario = usuario;
-        this.exercicios = new ArrayList<>();
-        this.concluido = false;
-        this.caloriasQueimadas = 0.0;
-        this.progresso = 0.0;
     }
 
-    // Getters e Setters
+    // Getters
     public UUID getId() {
         return id;
     }
@@ -46,40 +50,20 @@ public class Treino {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getTipoDeTreino() {
         return tipoDeTreino;
-    }
-
-    public void setTipoDeTreino(String tipoDeTreino) {
-        this.tipoDeTreino = tipoDeTreino;
     }
 
     public int getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(int duracao) {
-        this.duracao = duracao;
-    }
-
     public int getNivelDeDificuldade() {
         return nivelDeDificuldade;
     }
 
-    public void setNivelDeDificuldade(int nivelDeDificuldade) {
-        this.nivelDeDificuldade = nivelDeDificuldade;
-    }
-
     public Usuario getUsuario() {
         return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public ArrayList<Exercicio> getExercicios() {
@@ -98,49 +82,76 @@ public class Treino {
         return concluido;
     }
 
-    // Métodos que precisaremos para a classe negocio.Treino
+    // Setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTipoDeTreino(String tipoDeTreino) {
+        this.tipoDeTreino = tipoDeTreino;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracao = duracao;
+    }
+
+    public void setNivelDeDificuldade(int nivelDeDificuldade) {
+        this.nivelDeDificuldade = nivelDeDificuldade;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    // OUTROS MÉTODOS
+    // Método para adicionar um exercício ao treino
     public void adicionarExercicio(Exercicio exercicio) {
         if (exercicio != null && !exercicios.contains(exercicio)) {
             exercicios.add(exercicio);
-            calcularCaloriasQueimadas();
-            atualizarProgresso();
-            //Assim que um exercício é concluído, adicionamos ao progresso e atualizamos as calorias queimadas.
+            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
+            atualizarProgresso(); // Atualiza o progresso do treino
         }
     }
 
+    // Método para remover um exercício do treino
     public void removerExercicio(Exercicio exercicio) {
         if (exercicios.remove(exercicio)) {
-            calcularCaloriasQueimadas();
-            atualizarProgresso();
-            //Assim que um exercício é removido, atualizamos o progresso e as calorias queimadas.
+            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
+            atualizarProgresso(); // Atualiza o progresso do treino
         }
     }
 
-    // Calcular as calorias queimadas com base nos exercícios
+    // Método para calcular as calorias queimadas no treino
     public double calcularCaloriasQueimadas() {
-        caloriasQueimadas = 0;
+        caloriasQueimadas = 0; // Inicializa as calorias queimadas
         for (Exercicio exercicio : exercicios) {
             caloriasQueimadas += exercicio.calcularCaloriasQueimadas();
         }
         return caloriasQueimadas;
     }
 
-    // Atualiza a taxa de progresso geral do treino
+    // Método para atualizar o progresso do treino
     public void atualizarProgresso() {
+
+       //Verificação se o execício não começou, se sim, o progresso é zero e ele não está concluído.
         if (exercicios.isEmpty()) {
             progresso = 0.0;
             concluido = false;
             return;
-        } //Se não foi concluído nenhum exercício, retorna um progresso 0.
+        }
 
-        //Conta a quantidade de exercícios realizados:
-        long exerciciosConcluidos = exercicios.stream()
-                .filter(Exercicio::isConcluido)
-                .count();
+        // Conta a quantidade de exercícios concluídos
+        long exerciciosConcluidos = 0;
+        for (Exercicio exercicio : exercicios) {
+            if (exercicio.isConcluido()) {
+                exerciciosConcluidos++;
+            }
+        }
 
-        //Baseado na quantidade de exercícios concluídos, atribui um progresso.
+        // Calcula o progresso com base nos exercícios concluídos
+        // Calcula o progresso com base nos exercícios concluídos
         progresso = (exerciciosConcluidos / (double) exercicios.size()) * 100.0;
-        concluido = progresso == 100.0;
+        concluido = progresso == 100.0; // Treino como concluído se o progresso for 100%
     }
 
     @Override

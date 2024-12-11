@@ -3,6 +3,7 @@ package negocio;
 import java.util.*;
 
 public class Usuario {
+    private static Usuario instance; // Instância única para o padrão Singleton
     private UUID id;
     private String nome;
     private String email;
@@ -15,30 +16,42 @@ public class Usuario {
     private ArrayList<Treino> treinos;
     private ArrayList<Dieta> dietas;
 
-   public enum Sexo{
+    // Enum para representar o sexo do usuário
+    public enum Sexo {
         MASCULINO,
         FEMININO,
-        INDEFINIDO;
-    } //Quando pesquisei a melhor forma para armazenar o Sexo do Usuário, apareceu opção do Enum. Mudar p outro arquivo.
+        INDEFINIDO
+    }
 
-    public Usuario(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
-        this.id = UUID.randomUUID();
-       this.nome = nome;
+    // Construtor privado para o padrão Singleton
+    private Usuario() {
+        this.id = UUID.randomUUID(); // Gera um ID único
+        this.metas = new ArrayList<>();
+        this.treinos = new ArrayList<>();
+        this.dietas = new ArrayList<>();
+    }
+
+    // Método para obter a instância única do usuário do padrão Singleton
+    public static Usuario getInstance() {
+        if (instance == null) {
+            instance = new Usuario();
+        }
+        return instance;
+    }
+
+    // Método para inicializar o usuário com parâmetros
+    public void inicializar(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
+        this.nome = nome;
         this.email = email;
         this.dataNascimento = dataNascimento;
         this.sexo = sexo;
         this.peso = peso;
         this.altura = altura;
-
-        // Assim que o usuário incluir suas infos, a gente precisa inicilizar as listas.
-        this.metas = new ArrayList<>();
-        this.treinos = new ArrayList<>();
-        this.dietas = new ArrayList<>();
-
-        calcularIMC(); //Precisamos calcular o IMC assim que o usuário incluir suas infos.
+        calcularIMC();
     }
-    // Getters e Setters
-    public UUID getId(){
+
+    // Getters
+    public UUID getId() {
         return id;
     }
 
@@ -82,14 +95,15 @@ public class Usuario {
         return dietas;
     }
 
+    // Setters
     public void setAltura(float altura) {
         this.altura = altura;
-        calcularIMC(); // A gente precisa recalcular o IMC cada vez que a altura mudar
+        calcularIMC(); // Recalcula o IMC após alterar a altura
     }
 
     public void setPeso(float peso) {
         this.peso = peso;
-        calcularIMC(); // A gente precisa recalcular o IMC cada vez que o peso mudar
+        calcularIMC(); // Recalcula o IMC após alterar o peso
     }
 
     public void setSexo(Sexo sexo) {
@@ -108,7 +122,8 @@ public class Usuario {
         this.nome = nome;
     }
 
-    // Outros métodos
+    // OUTROS MÉTODOS
+    // Método para atualizar os dados do usuário, ele testa com um if se os dados fornecidos mudaram
     public void atualizarDados(String nome, String email, Date dataNascimento,
                                Sexo sexo, float peso, float altura) {
         if (nome != null) {
@@ -135,80 +150,86 @@ public class Usuario {
             this.altura = altura;
         }
 
-        // Sempre que a info sobre altura e peso mudar, a gente atualiza o IMC
-        calcularIMC();
+        calcularIMC(); // Recalcula o IMC após alterar peso e altura
     }
 
+    // Método para calcular o IMC do usuário
     public float calcularIMC() {
         if (altura > 0) {
-            // A fórmula do IMC é: peso / (altura em metros)²
-            this.imc = peso / (altura * altura);
+            this.imc = peso / (altura * altura); // IMC = peso / altura²
             return this.imc;
         }
-            throw new IllegalArgumentException("Altura e peso devem ser maiores que zero.");
-            //Esse erro é lançado se o usuário colocar números menores que zero.
+        throw new IllegalArgumentException("Altura e peso devem ser maiores que zero.");
     }
 
+    // Método para cadastrar uma meta para o usuário
     public void cadastrarMeta(Meta meta) {
+        // Adiciona a meta à lista se ela não for nula e não existir na lista
         if (meta != null && !metas.contains(meta)) {
-            //Checagem se a meta não é nula ou se não já está na lista de metas do usuário.
             metas.add(meta);
         }
     }
 
+    // Método para adicionar um treino para o usuário
     public void adicionarTreino(Treino treino) {
+        // Adiciona o treino à lista se ele não for nulo e não existir na lista
         if (treino != null && !treinos.contains(treino)) {
-            //Também checa se o treino não é nulo ou se não já está na lista de treinos do usuário.
             treinos.add(treino);
         }
     }
 
+    // Método para adicionar uma dieta para o usuário
     public void adicionarDieta(Dieta dieta) {
         if (dieta != null && !dietas.contains(dieta)) {
             dietas.add(dieta);
         }
     }
 
+    // Método para calcular o progresso geral do usuário
     public double getProgresso() {
-        double progressoTotal = 0; //Métrica criada por nós para medir o progresso
-        int contadorAtividades = 0; //Um contador de atividades par auxiliar
+        double progressoTotal = 0; // Essa variável vai acompanhar o progresso das atividades
+        int contadorAtividades = 0; // Só contabiliza as atividades
 
-        // Progresso das metas
+        // Calcula o progresso das metas
         for (Meta meta : metas) {
             progressoTotal += meta.getProgresso();
             contadorAtividades++;
         }
 
-        // Progresso dos treinos
+        // Calcula o progresso dos treinos
         for (Treino treino : treinos) {
             progressoTotal += treino.getProgresso();
             contadorAtividades++;
         }
 
-        // Progresso das dietas
+        // Calcula o progresso das dietas
         for (Dieta dieta : dietas) {
             progressoTotal += dieta.getProgresso();
             contadorAtividades++;
         }
 
-        // Aqui a gente calcula a média de progresso e retorna isso como uma nota para o usuário
+        // Calcula a média do progresso e retorna
         return contadorAtividades > 0 ?
                 progressoTotal / contadorAtividades : 0;
     }
 
-    // Esse método calcula a idade do usuário de acordo com a data de nascimento. Meio chatinho, mas tá aí.
+    // Método para calcular a idade do usuário
     public int getIdade() {
         if (dataNascimento == null) {
-            return 0;
+            return 0; // Retorna 0 se a data não existe.
         }
 
-        Calendar nascimento = Calendar.getInstance();
-        nascimento.setTime(dataNascimento);
+        //Usamos a Calendar abaixo porque a 'Date' foi descontinuada
+        //Calendar é uma classe abstrata
+        Calendar nascimento = Calendar.getInstance(); // Cria um calendário para a data de nascimento
+        nascimento.setTime(dataNascimento); // Define a data de nascimento no calendário
 
-        Calendar hoje = Calendar.getInstance();
+        Calendar hoje = Calendar.getInstance(); // Cria um calendário para a data atual
 
+        // Calcula a idade baseada na data de nascimento:
         int idade = hoje.get(Calendar.YEAR) - nascimento.get(Calendar.YEAR);
 
+        // Ajuste da idade caso o aniversário ainda não tenha ocorrido neste ano:
         if (hoje.get(Calendar.MONTH) < nascimento.get(Calendar.MONTH) ||
                 (hoje.get(Calendar.MONTH) == nascimento.get(Calendar.MONTH) &&
                         hoje.get(Calendar.DAY_OF_MONTH) < nascimento.get(Calendar.DAY_OF_MONTH))) {
@@ -218,6 +239,7 @@ public class Usuario {
         return idade;
     }
 
+    // Método toString
     @Override
     public String toString() {
         return "negocio.Usuario{" +

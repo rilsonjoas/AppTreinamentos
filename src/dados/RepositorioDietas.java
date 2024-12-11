@@ -3,46 +3,65 @@ package dados;
 import negocio.Dieta;
 import excecoes.DietaNaoEncontradaException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class RepositorioDietas {
-    private Map<UUID, Dieta> dietas;
+    private static final int MAX_DIETAS = 10;
+    private Dieta[] dietas;
+    private int totalDietas;
 
     public RepositorioDietas() {
-        this.dietas = new HashMap<>();
+        this.dietas = new Dieta[MAX_DIETAS];
+        this.totalDietas = 0;
     }
 
     public void adicionar(Dieta dieta) {
         if (dieta == null || dieta.getId() == null) {
             throw new IllegalArgumentException("Dieta inválida.");
         }
-        dietas.put(dieta.getId(), dieta);
+        if (totalDietas >= MAX_DIETAS) {
+            throw new IllegalStateException("Repositório de dietas está cheio.");
+        }
+        dietas[totalDietas++] = dieta;
     }
 
     public void remover(UUID id) throws DietaNaoEncontradaException {
-        if (!dietas.containsKey(id)) {
+        int index = -1;
+        for (int i = 0; i < totalDietas; i++) {
+            if (dietas[i].getId().equals(id)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) {
             throw new DietaNaoEncontradaException("Dieta não encontrada.");
         }
-        dietas.remove(id);
+
+        dietas[index] = dietas[totalDietas - 1];
+        dietas[totalDietas - 1] = null;
+        totalDietas--;
     }
 
     public Dieta buscar(UUID id) throws DietaNaoEncontradaException {
-        Dieta dieta = dietas.get(id);
-        if (dieta == null) {
-            throw new DietaNaoEncontradaException("Dieta não encontrada.");
+        for (int i = 0; i < totalDietas; i++) {
+            if (dietas[i].getId().equals(id)) {
+                return dietas[i];
+            }
         }
-        return dieta;
+        throw new DietaNaoEncontradaException("Dieta não encontrada.");
     }
 
     public void atualizar(Dieta dieta) throws DietaNaoEncontradaException {
         if (dieta == null || dieta.getId() == null) {
             throw new IllegalArgumentException("Dieta inválida.");
         }
-        if (!dietas.containsKey(dieta.getId())) {
-            throw new DietaNaoEncontradaException("Dieta não encontrada.");
+        for (int i = 0; i < totalDietas; i++) {
+            if (dietas[i].getId().equals(dieta.getId())) {
+                dietas[i] = dieta;
+                return;
+            }
         }
-        dietas.put(dieta.getId(), dieta);
+        throw new DietaNaoEncontradaException("Dieta não encontrada.");
     }
 }

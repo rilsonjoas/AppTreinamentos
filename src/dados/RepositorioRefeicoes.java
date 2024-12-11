@@ -3,46 +3,65 @@ package dados;
 import negocio.Refeicao;
 import excecoes.RefeicaoNaoEncontradaException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class RepositorioRefeicoes {
-    private Map<UUID, Refeicao> refeicoes;
+    private static final int MAX_REFEICOES = 100; // Define um tamanho máximo
+    private Refeicao[] refeicoes;
+    private int totalRefeicoes;
 
     public RepositorioRefeicoes() {
-        this.refeicoes = new HashMap<>();
+        this.refeicoes = new Refeicao[MAX_REFEICOES];
+        this.totalRefeicoes = 0;
     }
 
     public void adicionar(Refeicao refeicao) {
         if (refeicao == null || refeicao.getId() == null) {
             throw new IllegalArgumentException("Refeição inválida.");
         }
-        refeicoes.put(refeicao.getId(), refeicao);
+        if (totalRefeicoes >= MAX_REFEICOES) {
+            throw new IllegalStateException("Repositório de refeições está cheio.");
+        }
+        refeicoes[totalRefeicoes++] = refeicao;
     }
 
     public void remover(UUID id) throws RefeicaoNaoEncontradaException {
-        if (!refeicoes.containsKey(id)) {
+        int index = -1;
+        for (int i = 0; i < totalRefeicoes; i++) {
+            if (refeicoes[i].getId().equals(id)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) {
             throw new RefeicaoNaoEncontradaException("Refeição não encontrada.");
         }
-        refeicoes.remove(id);
+
+        refeicoes[index] = refeicoes[totalRefeicoes - 1];
+        refeicoes[totalRefeicoes - 1] = null;
+        totalRefeicoes--;
     }
 
     public Refeicao buscar(UUID id) throws RefeicaoNaoEncontradaException {
-        Refeicao refeicao = refeicoes.get(id);
-        if (refeicao == null) {
-            throw new RefeicaoNaoEncontradaException("Refeição não encontrada.");
+        for (int i = 0; i < totalRefeicoes; i++) {
+            if (refeicoes[i].getId().equals(id)) {
+                return refeicoes[i];
+            }
         }
-        return refeicao;
+        throw new RefeicaoNaoEncontradaException("Refeição não encontrada.");
     }
 
     public void atualizar(Refeicao refeicao) throws RefeicaoNaoEncontradaException {
         if (refeicao == null || refeicao.getId() == null) {
             throw new IllegalArgumentException("Refeição inválida.");
         }
-        if (!refeicoes.containsKey(refeicao.getId())) {
-            throw new RefeicaoNaoEncontradaException("Refeição não encontrada.");
+        for (int i = 0; i < totalRefeicoes; i++) {
+            if (refeicoes[i].getId().equals(refeicao.getId())) {
+                refeicoes[i] = refeicao;
+                return;
+            }
         }
-        refeicoes.put(refeicao.getId(), refeicao);
+        throw new RefeicaoNaoEncontradaException("Refeição não encontrada.");
     }
 }

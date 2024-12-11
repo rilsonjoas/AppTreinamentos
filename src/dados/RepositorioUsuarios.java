@@ -3,47 +3,59 @@ package dados;
 import negocio.Usuario;
 import excecoes.UsuarioNaoEncontradoException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class RepositorioUsuarios {
-    private Map<UUID, Usuario> usuarios;
+    private static final int MAX_USUARIOS = 10;
+    private Usuario[] usuarios;
+    private int totalUsuarios;
 
     public RepositorioUsuarios() {
-        this.usuarios = new HashMap<>();
+        this.usuarios = new Usuario[MAX_USUARIOS];
+        this.totalUsuarios = 0;
     }
 
     public void adicionar(Usuario usuario) {
         if (usuario == null || usuario.getId() == null) {
             throw new IllegalArgumentException("Usuário inválido.");
         }
-        usuarios.put(usuario.getId(), usuario);
+        if (totalUsuarios >= MAX_USUARIOS) {
+            throw new IllegalStateException("Repositório de usuários está cheio.");
+        }
+        usuarios[totalUsuarios++] = usuario;
     }
 
     public void remover(UUID id) throws UsuarioNaoEncontradoException {
-        if (!usuarios.containsKey(id)) {
-            throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
+        for (int i = 0; i < totalUsuarios; i++) {
+            if (usuarios[i].getId().equals(id)) {
+                usuarios[i] = usuarios[totalUsuarios - 1];
+                usuarios[totalUsuarios - 1] = null;
+                totalUsuarios--;
+                return;
+            }
         }
-        usuarios.remove(id);
+        throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
     }
 
     public Usuario buscar(UUID id) throws UsuarioNaoEncontradoException {
-        Usuario usuario = usuarios.get(id);
-        if (usuario == null) {
-            throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
+        for (int i = 0; i < totalUsuarios; i++) {
+            if (usuarios[i].getId().equals(id)) {
+                return usuarios[i];
+            }
         }
-        return usuario;
+        throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
     }
 
     public void atualizar(Usuario usuario) throws UsuarioNaoEncontradoException {
         if (usuario == null || usuario.getId() == null) {
             throw new IllegalArgumentException("Usuário inválido.");
         }
-        if (!usuarios.containsKey(usuario.getId())) {
-            throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
+        for (int i = 0; i < totalUsuarios; i++) {
+            if (usuarios[i].getId().equals(usuario.getId())) {
+                usuarios[i] = usuario;
+                return;
+            }
         }
-        usuarios.put(usuario.getId(), usuario);
+        throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
     }
 }
-

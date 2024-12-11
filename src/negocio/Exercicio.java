@@ -3,17 +3,19 @@ package negocio;
 import java.util.*;
 
 public class Exercicio {
+    private static Exercicio instance; // Instância única da classe (Singleton)
     private UUID id;
     private String nome;
     private String descricao;
     private ArrayList<String> musculosTrabalhados;
     private TipoExercicio tipo;
-    private int tempo; // em segundos
+    private int tempo;
     private double caloriasQueimadasPorMinuto;
     private boolean concluido;
     private double caloriasQueimadas;
 
-    // Enum para tipos de exercício
+
+    // Enum para representar os tipos de exercício (pode ser revisado)
     public enum TipoExercicio {
         FORCA,
         CARDIO,
@@ -23,17 +25,25 @@ public class Exercicio {
         OUTRO
     }
 
-    // Construtor padrão
-    public Exercicio() {
-        this.id = UUID.randomUUID();
-        this.musculosTrabalhados = new ArrayList<>();
-        this.concluido = false;
+    // Construtor privado para o padrão Singleton
+    private Exercicio() {
+        this.id = UUID.randomUUID(); // Gera um ID único
+        this.musculosTrabalhados = new ArrayList<>(); // Inicializa a lista de músculos trabalhados
+        this.concluido = false; // Define o exercício como não concluído inicialmente
+
     }
 
-    // Construtor com parâmetros
-    public Exercicio(String nome, String descricao, TipoExercicio tipo,
-                     int tempo, double caloriasQueimadasPorMinuto) {
-        this();
+    // Método para obter a instância única do exercício no padrão Singleton
+    public static Exercicio getInstance() {
+        if (instance == null) {
+            instance = new Exercicio();
+        }
+        return instance;
+    }
+
+    // Método para inicializar o exercício com parâmetros
+    public void inicializar(String nome, String descricao, TipoExercicio tipo,
+                            int tempo, double caloriasQueimadasPorMinuto) {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
@@ -41,8 +51,9 @@ public class Exercicio {
         this.caloriasQueimadasPorMinuto = caloriasQueimadasPorMinuto;
     }
 
+
     // Getters
-    public UUID getId(){
+    public UUID getId() {
         return id;
     }
 
@@ -54,12 +65,17 @@ public class Exercicio {
         return descricao;
     }
 
+
     public ArrayList<String> getMusculosTrabalhados() {
         return musculosTrabalhados;
     }
 
     public TipoExercicio getTipo() {
         return tipo;
+    }
+
+    public double getCaloriasQueimadas() {
+        return calcularCaloriasQueimadas();
     }
 
     public int getTempo() {
@@ -79,9 +95,11 @@ public class Exercicio {
         this.descricao = descricao;
     }
 
+
     public void setTipo(TipoExercicio tipo) {
         this.tipo = tipo;
     }
+
 
     public void setTempo(int tempo) {
         this.tempo = tempo;
@@ -91,34 +109,31 @@ public class Exercicio {
         this.caloriasQueimadasPorMinuto = caloriasQueimadasPorMinuto;
     }
 
-    // Métodos para manipular músculos trabalhados
+    // OUTROS MÉTODOS
+    // Adiciona um músculo à lista de músculos trabalhados, verificando se já existe
     public void adicionarMusculoTrabalhado(String musculo) {
-        if (musculo != null &&
-                !musculosTrabalhados.contains(musculo)) {
+        if (musculo != null && !musculosTrabalhados.contains(musculo)) {
             musculosTrabalhados.add(musculo);
         }
     }
 
+    // Remove um músculo da lista de músculos trabalhados
     public void removerMusculoTrabalhado(String musculo) {
         musculosTrabalhados.remove(musculo);
     }
 
+    // Calcula o total de calorias queimadas durante o exercício
     public double calcularCaloriasQueimadas() {
-        // Calcula calorias queimadas baseado no tempo e calorias por minuto
         caloriasQueimadas = (tempo / 60.0) * caloriasQueimadasPorMinuto;
         return caloriasQueimadas;
     }
 
-    public double getCaloriasQueimadas() {
-        return calcularCaloriasQueimadas();
-    }
-
-    // Método para marcar o exercício como concluído
+    // Marca o exercício como concluído
     public void concluir() {
         this.concluido = true;
     }
 
-    // Método para verificar se o exercício está concluído
+    // Retorna se o exercício está concluído
     public boolean isConcluido() {
         return concluido;
     }
