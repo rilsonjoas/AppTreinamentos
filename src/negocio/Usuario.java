@@ -3,7 +3,6 @@ package negocio;
 import java.util.*;
 
 public class Usuario {
-    private static Usuario instance; // Instância única para o padrão Singleton
     private UUID id;
     private String nome;
     private String email;
@@ -22,24 +21,16 @@ public class Usuario {
         FEMININO,
     }
 
-    // Construtor privado para o padrão Singleton
-    private Usuario() {
+    // Construtor
+    public Usuario() {
         this.id = UUID.randomUUID(); // Gera um ID único
         this.metas = new ArrayList<>();
         this.treinos = new ArrayList<>();
         this.dietas = new ArrayList<>();
     }
 
-    // Método para obter a instância única do usuário do padrão Singleton
-    public static Usuario getInstance() {
-        if (instance == null) {
-            instance = new Usuario();
-        }
-        return instance;
-    }
-
-    // Método para inicializar o usuário com parâmetros
-    public void inicializar(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
+    // Construtor com parâmetros
+    public Usuario(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
         this.nome = nome;
         this.email = email;
         this.dataNascimento = dataNascimento;

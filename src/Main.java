@@ -9,17 +9,14 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         // Criando um usuário usando o Singleton
-        Usuario usuario = Usuario.getInstance();
-        usuario.inicializar("João Silva", "joao.silva@email.com", new Date(1990, 5, 15), Usuario.Sexo.MASCULINO, 80f, 1.75f);
+        Usuario usuario = new Usuario("João Silva", "joao.silva@email.com", new Date(1990, 5, 15), Usuario.Sexo.MASCULINO, 80f, 1.75f);
         System.out.println("Usuário criado: " + usuario);
 
-        // Criando um treino usando o Singleton
-        Treino treinoMusculacao = Treino.getInstance();
-        treinoMusculacao.inicializar("Musculação", "Força", 60, 3, usuario);
+        // Criando um treino
+        Treino treinoMusculacao = new Treino("Musculação", "Força", 60, 3, usuario);
 
-        // Criando um exercício usando o Singleton
-        Exercicio exercicioAgachamento = Exercicio.getInstance();
-        exercicioAgachamento.inicializar("Agachamento", "Trabalha pernas e glúteos", Exercicio.TipoExercicio.FORCA, 60, 5.5);
+        // Criando um exercício
+        Exercicio exercicioAgachamento = new Exercicio("Agachamento", "Trabalha pernas e glúteos", Exercicio.TipoExercicio.FORCA, 60, 5.5);
         exercicioAgachamento.adicionarMusculoTrabalhado("Quadríceps");
         exercicioAgachamento.adicionarMusculoTrabalhado("Glúteos");
         exercicioAgachamento.concluir();
@@ -31,11 +28,10 @@ public class Main {
         System.out.println("Treino: " + treinoMusculacao);
 
         //Adicionando mais um exercício (dessa vez não concluído)
-        Exercicio exercicioCorrida = Exercicio.getInstance();
-        exercicioCorrida.inicializar("Corrida", "Exercício cardiovascular", Exercicio.TipoExercicio.CARDIO, 300, 10);
+        Exercicio exercicioCorrida = new Exercicio("Corrida", "Exercício cardiovascular", Exercicio.TipoExercicio.CARDIO, 300, 10);
         exercicioCorrida.adicionarMusculoTrabalhado("Perna");
         treinoMusculacao.adicionarExercicio(exercicioCorrida);
-        System.out.println("Treino atualizado: " + treinoMusculacao);
+        System.out.println("Treino em andamento: " + treinoMusculacao);
 
         //Atualizando o progresso do treino
         treinoMusculacao.atualizarProgresso();
@@ -51,8 +47,7 @@ public class Main {
         macronutrientes.put("Carboidratos", 30.0);
         macronutrientes.put("Gorduras", 10.0);
 
-        Refeicao refeicao = Refeicao.getInstance();
-        refeicao.inicializar("Almoço", "Frango com arroz e salada", macronutrientes);
+        Refeicao refeicao = new Refeicao("Almoço", "Frango com arroz e salada", macronutrientes);
         System.out.println("Refeição criada: " + refeicao.getNome() + ", Calorias: " + refeicao.getCalorias());
     }
 }

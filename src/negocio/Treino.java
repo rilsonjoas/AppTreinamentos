@@ -3,7 +3,6 @@ package negocio;
 import java.util.*;
 
 public class Treino {
-    private static Treino instance; // Instância única para o padrão Singleton
     private UUID id;
     private String nome;
     private String tipoDeTreino;
@@ -15,8 +14,8 @@ public class Treino {
     private double progresso;
     private boolean concluido;
 
-    // Construtor privado para o padrão Singleton
-    private Treino() {
+    // Construtor
+    public Treino() {
         this.id = UUID.randomUUID(); // Gera um ID único
         this.exercicios = new ArrayList<>();
         this.concluido = false; // Define o treino como não concluído inicialmente
@@ -24,21 +23,18 @@ public class Treino {
         this.progresso = 0.0;
     }
 
-    // Método para obter a instância única do treino no padrão Singleton
-    public static Treino getInstance() {
-        if (instance == null) {
-            instance = new Treino();
-        }
-        return instance;
-    }
-
-    // Método para inicializar o treino com parâmetros
-    public void inicializar(String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario) {
+    // Contrutor com parâmetros
+    public Treino(String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario) {
         this.nome = nome;
         this.tipoDeTreino = tipoDeTreino;
         this.duracao = duracao;
         this.nivelDeDificuldade = nivelDeDificuldade;
         this.usuario = usuario;
+        this.id = UUID.randomUUID();
+        this.exercicios = new ArrayList<>();
+        this.concluido = false;
+        this.caloriasQueimadas = 0.0;
+        this.progresso = 0.0;
     }
 
     // Getters

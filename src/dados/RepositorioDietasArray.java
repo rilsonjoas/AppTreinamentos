@@ -7,12 +7,10 @@ import negocio.Dieta;
 import java.util.UUID;
 
 public class RepositorioDietasArray implements IRepositorioDietas {
-
     private Dieta[] dietas;
     private int proximoIndice;
 
     private static RepositorioDietasArray instanciaUnica;
-
 
     private RepositorioDietasArray() {
         dietas = new Dieta[10];

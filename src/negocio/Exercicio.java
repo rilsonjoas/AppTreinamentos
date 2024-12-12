@@ -3,7 +3,6 @@ package negocio;
 import java.util.*;
 
 public class Exercicio {
-    private static Exercicio instance; // Instância única da classe (Singleton)
     private UUID id;
     private String nome;
     private String descricao;
@@ -25,30 +24,25 @@ public class Exercicio {
         OUTRO
     }
 
-    // Construtor privado para o padrão Singleton
-    private Exercicio() {
+    // Construtor
+    public Exercicio() {
         this.id = UUID.randomUUID(); // Gera um ID único
         this.musculosTrabalhados = new ArrayList<>(); // Inicializa a lista de músculos trabalhados
         this.concluido = false; // Define o exercício como não concluído inicialmente
 
     }
 
-    // Método para obter a instância única do exercício no padrão Singleton
-    public static Exercicio getInstance() {
-        if (instance == null) {
-            instance = new Exercicio();
-        }
-        return instance;
-    }
-
-    // Método para inicializar o exercício com parâmetros
-    public void inicializar(String nome, String descricao, TipoExercicio tipo,
-                            int tempo, double caloriasQueimadasPorMinuto) {
+    // Construtor com parâmetros
+    public Exercicio(String nome, String descricao, TipoExercicio tipo,
+                     int tempo, double caloriasQueimadasPorMinuto) {
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
         this.tempo = tempo;
         this.caloriasQueimadasPorMinuto = caloriasQueimadasPorMinuto;
+        this.musculosTrabalhados = new ArrayList<>();
+        this.concluido = false;
+        this.caloriasQueimadas = 0.0;
     }
 
 

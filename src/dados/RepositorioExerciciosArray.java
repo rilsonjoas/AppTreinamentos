@@ -13,7 +13,6 @@ public class RepositorioExerciciosArray implements IRepositorioExercicios {
 
     private static RepositorioExerciciosArray instanciaUnica;
 
-
     private RepositorioExerciciosArray() {
         exercicios = new Exercicio[10];
         proximoIndice = 0;

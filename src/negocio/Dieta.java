@@ -3,7 +3,6 @@ package negocio;
 import java.util.*;
 
 public class Dieta {
-    private static Dieta instance; // Instância única da classe (Singleton)
     private UUID id;
     private String nome;
     private Objetivo objetivo;
@@ -17,25 +16,19 @@ public class Dieta {
         PERDA_DE_PESO, GANHO_DE_MASSA, MANUTENCAO;
     }
 
-    // Construtor privado para o padrão Singleton
-    private Dieta() {
+    // Construtor
+    public Dieta() {
         this.id = UUID.randomUUID(); // Gera um ID único
         this.macronutrientes = new HashMap<>();
         this.refeicoes = new ArrayList<>();
     }
 
-    // Método para obter a instância única do treino no padrão Singleton
-    public static Dieta getInstance() {
-        if (instance == null) {
-            instance = new Dieta();
-        }
-        return instance;
-    }
-
-    // Método para inicializar a dieta com parâmetros
+    // Construtor com parâmetros
     public void inicializar(String nome, Objetivo objetivo, int caloriasDiarias, Usuario usuario) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.objetivo = objetivo;
+        this.macronutrientes = new HashMap<>();
         this.caloriasDiarias = caloriasDiarias;
         this.usuario = usuario;
     }

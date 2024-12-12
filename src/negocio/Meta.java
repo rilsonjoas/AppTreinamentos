@@ -3,7 +3,6 @@ package negocio;
 import java.util.*;
 
 public class Meta {
-    private static Meta instance; // Instância única da classe (Singleton)
     private UUID id;
     private String descricao;
     private Tipo tipo;
@@ -17,26 +16,21 @@ public class Meta {
         PESO, MEDIDAS, OUTROS;
     }
 
-    // Construtor privado para o padrão Singleton
-    private Meta() {
+    // Construtor
+    public Meta() {
         this.id = UUID.randomUUID(); // Gera um ID único
         this.dataCriacao = new Date(); // Define a data de criação como a data atual
     }
 
-    // Método para obter a instância única da Meta no padrão Singleton
-    public static Meta getInstance() {
-        if (instance == null) {
-            instance = new Meta();
-        }
-        return instance;
-    }
-
-    // Método para inicializar a meta com parâmetros
-    public void inicializar(String descricao, Tipo tipo, double valorAlvo, double progressoAtual) {
+    // Construtor com parâmetros
+    public Meta(String descricao, Tipo tipo, double valorAlvo, double progressoAtual, Date dataConclusao) {
+        this.id = UUID.randomUUID();
         this.descricao = descricao;
         this.tipo = tipo;
         this.valorAlvo = valorAlvo;
         this.progressoAtual = progressoAtual;
+        this.dataCriacao = new Date();
+        this.dataConclusao = dataConclusao;
     }
 
 

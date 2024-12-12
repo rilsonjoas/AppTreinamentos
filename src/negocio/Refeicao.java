@@ -3,28 +3,20 @@ package negocio;
 import java.util.*;
 
 public class Refeicao {
-    private static Refeicao instance; // Instância única da classe (Singleton)
     private UUID id;
     private String nome;
     private String descricao;
     private int calorias;
     private Map<String, Double> macronutrientes;
 
-    // Construtor privado para o padrão Singleton
-    private Refeicao() {
+    // Construtor
+    public Refeicao() {
         this.id = UUID.randomUUID(); // Gera um ID único
     }
 
-    // Método para obter a instância única da Refeição no padrão Singleton
-    public static Refeicao getInstance() {
-        if (instance == null) {
-            instance = new Refeicao();
-        }
-        return instance;
-    }
-
-    // Método para inicializar a refeição com parâmetros
-    public void inicializar(String nome, String descricao, Map<String, Double> macronutrientes) {
+    // Construtor com parâmetros
+    public Refeicao(String nome, String descricao, Map<String, Double> macronutrientes) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.descricao = descricao;
         this.macronutrientes = macronutrientes;
@@ -78,9 +70,9 @@ public class Refeicao {
                 String macro = entry.getKey();
                 Double quantidade = entry.getValue();
                 if (macro.equals("Proteínas") || macro.equals("Carboidratos")) {
-                    totalCalorias += quantidade * 4;
+                    totalCalorias += quantidade;
                 } else if (macro.equals("Gorduras")) {
-                    totalCalorias += quantidade * 9;
+                    totalCalorias += quantidade;
                 }
             }
         }
