@@ -20,7 +20,6 @@ public class Usuario {
     public enum Sexo {
         MASCULINO,
         FEMININO,
-        INDEFINIDO
     }
 
     // Construtor privado para o padrão Singleton
