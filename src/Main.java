@@ -1,15 +1,21 @@
 import negocio.*;
 import dados.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Main {
     public static void main(String[] args) {
-        // Criando um usuário usando o Singleton
-        Usuario usuario = new Usuario("João Silva", "joao.silva@email.com", new Date(1990, 5, 15), Usuario.Sexo.MASCULINO, 80f, 1.75f);
+        // Criando um usuário usando LocalDate
+        Usuario usuario = new Usuario(
+                "João Silva",
+                "joao.silva@email.com",
+                LocalDate.of(1990, 6, 15),  // Ano, Mês, Dia
+                Usuario.Sexo.MASCULINO,
+                80f,
+                1.75f
+        );
         System.out.println("Usuário criado: " + usuario);
 
         // Criando um treino
@@ -41,7 +47,7 @@ public class Main {
         RepositorioUsuariosArray repositorioUsuariosArray = new RepositorioUsuariosArray();
         repositorioUsuariosArray.adicionar(usuario);
 
-        //Exemplo de criação de refeição usando o Singleton
+        //Exemplo de criação de refeição
         Map<String, Double> macronutrientes = new HashMap<>();
         macronutrientes.put("Proteínas", 20.0);
         macronutrientes.put("Carboidratos", 30.0);

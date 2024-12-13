@@ -1,12 +1,15 @@
 package negocio;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class Usuario {
     private UUID id;
     private String nome;
     private String email;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private Sexo sexo;
     private float peso;
     private float altura;
@@ -30,7 +33,8 @@ public class Usuario {
     }
 
     // Construtor com parâmetros
-    public Usuario(String nome, String email, Date dataNascimento, Sexo sexo, float peso, float altura) {
+    public Usuario(String nome, String email, LocalDate dataNascimento, Sexo sexo, float peso, float altura) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.email = email;
         this.dataNascimento = dataNascimento;
@@ -38,6 +42,9 @@ public class Usuario {
         this.peso = peso;
         this.altura = altura;
         calcularIMC();
+        this.metas = new ArrayList<>();
+        this.treinos = new ArrayList<>();
+        this.dietas = new ArrayList<>();
     }
 
     // Getters
@@ -53,7 +60,7 @@ public class Usuario {
         return email;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
@@ -100,7 +107,7 @@ public class Usuario {
         this.sexo = sexo;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
@@ -114,7 +121,7 @@ public class Usuario {
 
     // OUTROS MÉTODOS
     // Método para atualizar os dados do usuário, ele testa com um if se os dados fornecidos mudaram
-    public void atualizarDados(String nome, String email, Date dataNascimento,
+    public void atualizarDados(String nome, String email, LocalDate dataNascimento,
                                Sexo sexo, float peso, float altura) {
         if (nome != null) {
             this.nome = nome;
@@ -209,24 +216,8 @@ public class Usuario {
             return 0; // Retorna 0 se a data não existe.
         }
 
-        //Usamos a Calendar abaixo porque a 'Date' foi descontinuada
-        //Calendar é uma classe abstrata
-        Calendar nascimento = Calendar.getInstance(); // Cria um calendário para a data de nascimento
-        nascimento.setTime(dataNascimento); // Define a data de nascimento no calendário
-
-        Calendar hoje = Calendar.getInstance(); // Cria um calendário para a data atual
-
-        // Calcula a idade baseada na data de nascimento:
-        int idade = hoje.get(Calendar.YEAR) - nascimento.get(Calendar.YEAR);
-
-        // Ajuste da idade caso o aniversário ainda não tenha ocorrido neste ano:
-        if (hoje.get(Calendar.MONTH) < nascimento.get(Calendar.MONTH) ||
-                (hoje.get(Calendar.MONTH) == nascimento.get(Calendar.MONTH) &&
-                        hoje.get(Calendar.DAY_OF_MONTH) < nascimento.get(Calendar.DAY_OF_MONTH))) {
-            idade--;
-        }
-
-        return idade;
+        // Usa Period para calcular a idade
+        return Period.between(dataNascimento, LocalDate.now()).getYears();
     }
 
     // Método toString
