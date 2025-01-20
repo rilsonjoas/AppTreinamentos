@@ -100,55 +100,11 @@ public class Treino {
     }
 
     // OUTROS MÉTODOS
-    // Método para adicionar um exercício ao treino
-    public void adicionarExercicio(Exercicio exercicio) {
-        if (exercicio != null && !exercicios.contains(exercicio)) {
-            exercicios.add(exercicio);
-            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
-            atualizarProgresso(); // Atualiza o progresso do treino
-        }
-    }
 
-    // Método para remover um exercício do treino
-    public void removerExercicio(Exercicio exercicio) {
-        if (exercicios.remove(exercicio)) {
-            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
-            atualizarProgresso(); // Atualiza o progresso do treino
-        }
-    }
 
-    // Método para calcular as calorias queimadas no treino
-    public double calcularCaloriasQueimadas() {
-        caloriasQueimadas = 0; // Inicializa as calorias queimadas
-        for (Exercicio exercicio : exercicios) {
-            caloriasQueimadas += exercicio.calcularCaloriasQueimadas();
-        }
-        return caloriasQueimadas;
-    }
 
     // Método para atualizar o progresso do treino
-    public void atualizarProgresso() {
 
-       //Verificação se o execício não começou, se sim, o progresso é zero e ele não está concluído.
-        if (exercicios.isEmpty()) {
-            progresso = 0.0;
-            concluido = false;
-            return;
-        }
-
-        // Conta a quantidade de exercícios concluídos
-        long exerciciosConcluidos = 0;
-        for (Exercicio exercicio : exercicios) {
-            if (exercicio.isConcluido()) {
-                exerciciosConcluidos++;
-            }
-        }
-
-        // Calcula o progresso com base nos exercícios concluídos
-        // Calcula o progresso com base nos exercícios concluídos
-        progresso = (exerciciosConcluidos / (double) exercicios.size()) * 100.0;
-        concluido = progresso == 100.0; // Treino como concluído se o progresso for 100%
-    }
 
     @Override
     public String toString() {

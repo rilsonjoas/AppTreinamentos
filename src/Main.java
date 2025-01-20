@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        // Criando um usuário usando LocalDate
+        /*// Criando um usuário usando LocalDate
         Usuario usuario = new Usuario(
                 "João Silva",
                 "joao.silva@email.com",
@@ -54,6 +54,6 @@ public class Main {
         macronutrientes.put("Gorduras", 10.0);
 
         Refeicao refeicao = new Refeicao("Almoço", "Frango com arroz e salada", macronutrientes);
-        System.out.println("Refeição criada: " + refeicao.getNome() + ", Calorias: " + refeicao.getCalorias());
+        System.out.println("Refeição criada: " + refeicao.getNome() + ", Calorias: " + refeicao.getCalorias());*/
     }
 }
