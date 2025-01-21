@@ -13,8 +13,7 @@ public class Exercicio {
     private boolean concluido;
     private double caloriasQueimadas;
 
-
-    // Enum para representar os tipos de exercício (pode ser revisado)
+    // Enum para representar os tipos de exercício
     public enum TipoExercicio {
         FORCA,
         CARDIO,
@@ -26,25 +25,23 @@ public class Exercicio {
 
     // Construtor
     public Exercicio() {
-        this.id = UUID.randomUUID(); // Gera um ID único
-        this.musculosTrabalhados = new ArrayList<>(); // Inicializa a lista de músculos trabalhados
-        this.concluido = false; // Define o exercício como não concluído inicialmente
-
+        this.id = UUID.randomUUID();
+        this.musculosTrabalhados = new ArrayList<>();
+        this.concluido = false;
     }
 
-    // Construtor com parâmetros
-    public Exercicio(String nome, String descricao, TipoExercicio tipo,
-                     int tempo, double caloriasQueimadasPorMinuto) {
+    public Exercicio(UUID id, String nome, String descricao, ArrayList<String> musculosTrabalhados, TipoExercicio tipo,
+            int tempo, double caloriasQueimadasPorMinuto, boolean concluido, double caloriasQueimadas) {
+        this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.musculosTrabalhados = musculosTrabalhados;
         this.tipo = tipo;
         this.tempo = tempo;
         this.caloriasQueimadasPorMinuto = caloriasQueimadasPorMinuto;
-        this.musculosTrabalhados = new ArrayList<>();
-        this.concluido = false;
-        this.caloriasQueimadas = 0.0;
+        this.concluido = concluido;
+        this.caloriasQueimadas = caloriasQueimadas;
     }
-
 
     // Getters
     public UUID getId() {
@@ -59,7 +56,6 @@ public class Exercicio {
         return descricao;
     }
 
-
     public ArrayList<String> getMusculosTrabalhados() {
         return musculosTrabalhados;
     }
@@ -68,16 +64,20 @@ public class Exercicio {
         return tipo;
     }
 
-    public double getCaloriasQueimadas() {
-        return calcularCaloriasQueimadas();
-    }
-
     public int getTempo() {
         return tempo;
     }
 
     public double getCaloriasQueimadasPorMinuto() {
         return caloriasQueimadasPorMinuto;
+    }
+
+    public boolean isConcluido() {
+        return concluido;
+    }
+
+    public double getCaloriasQueimadas() {
+        return caloriasQueimadas;
     }
 
     // Setters
@@ -89,11 +89,9 @@ public class Exercicio {
         this.descricao = descricao;
     }
 
-
     public void setTipo(TipoExercicio tipo) {
         this.tipo = tipo;
     }
-
 
     public void setTempo(int tempo) {
         this.tempo = tempo;
@@ -103,43 +101,16 @@ public class Exercicio {
         this.caloriasQueimadasPorMinuto = caloriasQueimadasPorMinuto;
     }
 
-    // OUTROS MÉTODOS
-    // Adiciona um músculo à lista de músculos trabalhados, verificando se já existe
-    public void adicionarMusculoTrabalhado(String musculo) {
-        if (musculo != null && !musculosTrabalhados.contains(musculo)) {
-            musculosTrabalhados.add(musculo);
-        }
+    public void setMusculosTrabalhados(ArrayList<String> musculosTrabalhados) {
+        this.musculosTrabalhados = musculosTrabalhados;
     }
 
-    // Remove um músculo da lista de músculos trabalhados
-    public void removerMusculoTrabalhado(String musculo) {
-        musculosTrabalhados.remove(musculo);
+    public void setConcluido(boolean concluido) {
+        this.concluido = concluido;
     }
 
-    // Calcula o total de calorias queimadas durante o exercício
-    public double calcularCaloriasQueimadas() {
-        caloriasQueimadas = (tempo / 60.0) * caloriasQueimadasPorMinuto;
-        return caloriasQueimadas;
+    public void setCaloriasQueimadas(double caloriasQueimadas) {
+        this.caloriasQueimadas = caloriasQueimadas;
     }
 
-    // Marca o exercício como concluído
-    public void concluir() {
-        this.concluido = true;
-    }
-
-    // Retorna se o exercício está concluído
-    public boolean isConcluido() {
-        return concluido;
-    }
-
-    @Override
-    public String toString() {
-        return "negocio.Exercicio{" +
-                "nome='" + nome + '\'' +
-                ", tipo=" + tipo +
-                ", tempo=" + tempo + " segundos" +
-                ", calorias=" + String.format("%.2f", caloriasQueimadas) +
-                ", concluido=" + concluido +
-                '}';
-    }
 }

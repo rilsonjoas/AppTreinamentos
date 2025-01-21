@@ -11,16 +11,15 @@ public class Refeicao {
 
     // Construtor
     public Refeicao() {
-        this.id = UUID.randomUUID(); // Gera um ID único
+        this.id = UUID.randomUUID();
     }
 
-    // Construtor com parâmetros
-    public Refeicao(String nome, String descricao, Map<String, Double> macronutrientes) {
-        this.id = UUID.randomUUID();
+    public Refeicao(UUID id, String nome, String descricao, int calorias, Map<String, Double> macronutrientes) {
+        this.id = id;
         this.nome = nome;
         this.descricao = descricao;
+        this.calorias = calorias;
         this.macronutrientes = macronutrientes;
-        this.calorias = calcularCalorias();
     }
 
     // Getters
@@ -53,36 +52,15 @@ public class Refeicao {
         this.descricao = descricao;
     }
 
+    public void setCalorias(int calorias) {
+        this.calorias = calorias;
+    }
+
     public void setMacronutrientes(Map<String, Double> macronutrientes) {
         this.macronutrientes = macronutrientes;
-        this.calorias = calcularCalorias(); // Recalcula as calorias após atualizar os macronutrientes
     }
 
-    // OUTROS MÉTODOS
-    // Método para calcular o total de calorias da refeição com base nos macronutrientes
-    public int calcularCalorias() {
-        double totalCalorias = 0;
-
-        //Se macronutrientes não for nulo
-        if (macronutrientes != null) {
-            //Interação por todos os macronutrientes da nutrição
-            for (Map.Entry<String, Double> entry : macronutrientes.entrySet()) {
-                String macro = entry.getKey();
-                Double quantidade = entry.getValue();
-                if (macro.equals("Proteínas") || macro.equals("Carboidratos")) {
-                    totalCalorias += quantidade;
-                } else if (macro.equals("Gorduras")) {
-                    totalCalorias += quantidade;
-                }
-            }
-        }
-
-        //Conversão do totalCalorias para um valor inteiro
-        return (int) Math.round(totalCalorias);
-    }
-
-    // Retorna uma cópia dos macronutrientes para evitar modificações diretas em Refeição
-    public Map<String, Double> calcularMacronutrientes() {
-        return new HashMap<>(macronutrientes);
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

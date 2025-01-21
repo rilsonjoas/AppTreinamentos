@@ -82,10 +82,10 @@ public class RepositorioRefeicoesArray implements IRepositorioRefeicoes {
     @Override
     public Refeicao buscar(UUID id) throws RefeicaoNaoEncontradaException {
         int indice = procurarIndice(id);
-        if ( indice < proximoIndice) {
+        if (indice < proximoIndice) {
             return refeicoes[indice];
-        }else {
-            throw new RefeicaoNaoEncontradaException("Refeição não encontrada para buscar.");
+        } else {
+            throw new RefeicaoNaoEncontradaException("Refeição não encontrada.");
         }
     }
 }

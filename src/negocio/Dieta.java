@@ -11,28 +11,28 @@ public class Dieta {
     private ArrayList<Refeicao> refeicoes;
     private Usuario usuario;
 
-    // Enum para representar os objetivos da dieta (deve ser atualizado futuramente)
+    // Enum para representar os objetivos da dieta
     public enum Objetivo {
         PERDA_DE_PESO, GANHO_DE_MASSA, MANUTENCAO;
     }
 
     // Construtor
     public Dieta() {
-        this.id = UUID.randomUUID(); // Gera um ID único
-        this.macronutrientes = new HashMap<>();
+        this.id = UUID.randomUUID();
+        this.macronutrientes = new HashMap<>(); // or whatever Map implementation you prefer
         this.refeicoes = new ArrayList<>();
     }
 
-    // Construtor com parâmetros
-    public void inicializar(String nome, Objetivo objetivo, int caloriasDiarias, Usuario usuario) {
-        this.id = UUID.randomUUID();
+    public Dieta(UUID id, String nome, Objetivo objetivo, int caloriasDiarias, Map<String, Double> macronutrientes,
+            ArrayList<Refeicao> refeicoes, Usuario usuario) {
+        this.id = id;
         this.nome = nome;
         this.objetivo = objetivo;
-        this.macronutrientes = new HashMap<>();
         this.caloriasDiarias = caloriasDiarias;
+        this.macronutrientes = macronutrientes;
+        this.refeicoes = refeicoes;
         this.usuario = usuario;
     }
-
 
     // Getters
     public UUID getId() {
@@ -55,7 +55,7 @@ public class Dieta {
         return macronutrientes;
     }
 
-    public List<Refeicao> getRefeicoes() {
+    public ArrayList<Refeicao> getRefeicoes() {
         return refeicoes;
     }
 
@@ -63,7 +63,10 @@ public class Dieta {
         return usuario;
     }
 
-    //Setters
+    // Setters
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -89,61 +92,4 @@ public class Dieta {
         this.usuario = usuario;
     }
 
-    // OUTROS MÉTODOS
-    // Adiciona uma refeição à lista de refeições
-    public void adicionarRefeicao(Refeicao refeicao) {
-        if (refeicao != null && !refeicoes.contains(refeicao)) {
-            refeicoes.add(refeicao);
-        }
-    }
-
-    // Remove uma refeição da lista de refeições
-    public void removerRefeicao(Refeicao refeicao) {
-        refeicoes.remove(refeicao);
-    }
-
-    // Calcula o total de macronutrientes da dieta com base nas refeições que a compõem
-    public Map<String, Double> calcularMacronutrientes() {
-        Map<String, Double> totalMacronutrientes = new HashMap<>();
-        for (Refeicao refeicao : refeicoes) {
-            Map<String, Double> macrosRefeicao = refeicao.getMacronutrientes();
-
-           //Soma os valores dos macronutrientes de cada refeição e armazena o total em um mapa
-            for (Map.Entry<String, Double> entry : macrosRefeicao.entrySet()) {
-                totalMacronutrientes.put(entry.getKey(), totalMacronutrientes.getOrDefault(entry.getKey(), 0.0) + entry.getValue());
-            }
-        }
-
-        return totalMacronutrientes;
-    }
-
-
-    // Calcula o total de calorias da dieta com base nas refeições
-    public int calcularCaloriasTotais() {
-        int totalCalorias = 0;
-        for (Refeicao refeicao : refeicoes) {
-            totalCalorias += refeicao.getCalorias();
-        }
-        return totalCalorias;
-    }
-
-
-    // Calcula o progresso da dieta em relação à meta de calorias diárias
-    public double getProgresso() {
-        //Se para evitar divisão por zero:
-        if (caloriasDiarias == 0) {
-            return 0;
-        }
-        return (double) calcularCaloriasTotais() / caloriasDiarias * 100;
-    }
-
-    // Verifica se a dieta foi concluída com base no objetivo e nas calorias consumidas
-    public boolean isConcluido() {
-        if (objetivo == Objetivo.PERDA_DE_PESO) {
-            return calcularCaloriasTotais() <= caloriasDiarias;
-        } else if (objetivo == Objetivo.GANHO_DE_MASSA) {
-            return calcularCaloriasTotais() >= caloriasDiarias;
-        }
-        return false;
-    }
 }

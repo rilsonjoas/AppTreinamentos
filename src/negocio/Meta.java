@@ -11,28 +11,27 @@ public class Meta {
     private Date dataCriacao;
     private Date dataConclusao;
 
-    // Enum para representar os tipos de meta (pode mudar)
+    // Enum para representar os tipos de meta
     public enum Tipo {
         PESO, MEDIDAS, OUTROS;
     }
 
     // Construtor
     public Meta() {
-        this.id = UUID.randomUUID(); // Gera um ID único
-        this.dataCriacao = new Date(); // Define a data de criação como a data atual
+        this.id = UUID.randomUUID();
+        this.dataCriacao = new Date();
     }
 
-    // Construtor com parâmetros
-    public Meta(String descricao, Tipo tipo, double valorAlvo, double progressoAtual, Date dataConclusao) {
-        this.id = UUID.randomUUID();
+    public Meta(UUID id, String descricao, Tipo tipo, double valorAlvo, double progressoAtual, Date dataCriacao,
+            Date dataConclusao) {
+        this.id = id;
         this.descricao = descricao;
         this.tipo = tipo;
         this.valorAlvo = valorAlvo;
         this.progressoAtual = progressoAtual;
-        this.dataCriacao = new Date();
+        this.dataCriacao = dataCriacao;
         this.dataConclusao = dataConclusao;
     }
-
 
     // Getters
     public UUID getId() {
@@ -63,7 +62,7 @@ public class Meta {
         return progressoAtual;
     }
 
-    //Setters
+    // Setters
 
     public void setValorAlvo(double valorAlvo) {
         this.valorAlvo = valorAlvo;
@@ -85,22 +84,12 @@ public class Meta {
         this.tipo = tipo;
     }
 
-    // OUTROS MÉTODOS
-    // Verifica se a meta foi concluída
-    public boolean isConcluida() {
-        return dataConclusao != null;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    // Calcula o progresso da meta em porcentagem
-    public double getProgresso() {
-        if (valorAlvo == 0) {
-            return 0;
-        }
-        return (progressoAtual / valorAlvo) * 100;
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 
-    // Define a data de conclusão para a data atual, marcando a meta como concluída
-    public void concluirMeta() {
-        this.dataConclusao = new Date();
-    }
 }

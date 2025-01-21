@@ -85,7 +85,7 @@ public class RepositorioMetasArray implements IRepositorioMetas {
         if (indice < proximoIndice) {
             return metas[indice];
         } else {
-            throw new MetaNaoEncontradaException("Meta não encontrada para buscar.");
+            throw new MetaNaoEncontradaException("Meta não encontrada.");
         }
     }
 }

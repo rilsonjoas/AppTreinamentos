@@ -16,25 +16,25 @@ public class Treino {
 
     // Construtor
     public Treino() {
-        this.id = UUID.randomUUID(); // Gera um ID único
-        this.exercicios = new ArrayList<>();
-        this.concluido = false; // Define o treino como não concluído inicialmente
-        this.caloriasQueimadas = 0.0;
-        this.progresso = 0.0;
-    }
-
-    // Contrutor com parâmetros
-    public Treino(String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario) {
-        this.nome = nome;
-        this.tipoDeTreino = tipoDeTreino;
-        this.duracao = duracao;
-        this.nivelDeDificuldade = nivelDeDificuldade;
-        this.usuario = usuario;
         this.id = UUID.randomUUID();
         this.exercicios = new ArrayList<>();
         this.concluido = false;
         this.caloriasQueimadas = 0.0;
         this.progresso = 0.0;
+    }
+
+    public Treino(UUID id, String nome, String tipoDeTreino, int duracao, int nivelDeDificuldade, Usuario usuario,
+            ArrayList<Exercicio> exercicios, double caloriasQueimadas, double progresso, boolean concluido) {
+        this.id = id;
+        this.nome = nome;
+        this.tipoDeTreino = tipoDeTreino;
+        this.duracao = duracao;
+        this.nivelDeDificuldade = nivelDeDificuldade;
+        this.usuario = usuario;
+        this.exercicios = exercicios;
+        this.caloriasQueimadas = caloriasQueimadas;
+        this.progresso = progresso;
+        this.concluido = concluido;
     }
 
     // Getters
@@ -79,6 +79,10 @@ public class Treino {
     }
 
     // Setters
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -99,66 +103,20 @@ public class Treino {
         this.usuario = usuario;
     }
 
-    // OUTROS MÉTODOS
-    // Método para adicionar um exercício ao treino
-    public void adicionarExercicio(Exercicio exercicio) {
-        if (exercicio != null && !exercicios.contains(exercicio)) {
-            exercicios.add(exercicio);
-            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
-            atualizarProgresso(); // Atualiza o progresso do treino
-        }
+    public void setExercicios(ArrayList<Exercicio> exercicios) {
+        this.exercicios = exercicios;
     }
 
-    // Método para remover um exercício do treino
-    public void removerExercicio(Exercicio exercicio) {
-        if (exercicios.remove(exercicio)) {
-            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
-            atualizarProgresso(); // Atualiza o progresso do treino
-        }
+    public void setCaloriasQueimadas(double caloriasQueimadas) {
+        this.caloriasQueimadas = caloriasQueimadas;
     }
 
-    // Método para calcular as calorias queimadas no treino
-    public double calcularCaloriasQueimadas() {
-        caloriasQueimadas = 0; // Inicializa as calorias queimadas
-        for (Exercicio exercicio : exercicios) {
-            caloriasQueimadas += exercicio.calcularCaloriasQueimadas();
-        }
-        return caloriasQueimadas;
+    public void setProgresso(double progresso) {
+        this.progresso = progresso;
     }
 
-    // Método para atualizar o progresso do treino
-    public void atualizarProgresso() {
-
-       //Verificação se o execício não começou, se sim, o progresso é zero e ele não está concluído.
-        if (exercicios.isEmpty()) {
-            progresso = 0.0;
-            concluido = false;
-            return;
-        }
-
-        // Conta a quantidade de exercícios concluídos
-        long exerciciosConcluidos = 0;
-        for (Exercicio exercicio : exercicios) {
-            if (exercicio.isConcluido()) {
-                exerciciosConcluidos++;
-            }
-        }
-
-        // Calcula o progresso com base nos exercícios concluídos
-        // Calcula o progresso com base nos exercícios concluídos
-        progresso = (exerciciosConcluidos / (double) exercicios.size()) * 100.0;
-        concluido = progresso == 100.0; // Treino como concluído se o progresso for 100%
+    public void setConcluido(boolean concluido) {
+        this.concluido = concluido;
     }
 
-    @Override
-    public String toString() {
-        return "negocio.Treino{" +
-                "nome='" + nome + '\'' +
-                ", tipoDeTreino='" + tipoDeTreino + '\'' +
-                ", duracao=" + duracao +
-                ", nivelDeDificuldade=" + nivelDeDificuldade +
-                ", progresso=" + progresso +
-                ", concluido=" + concluido +
-                '}';
-    }
 }

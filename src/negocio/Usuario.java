@@ -1,7 +1,6 @@
 package negocio;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,7 +25,7 @@ public class Usuario {
 
     // Construtor
     public Usuario() {
-        this.id = UUID.randomUUID(); // Gera um ID único
+        this.id = UUID.randomUUID();
         this.metas = new ArrayList<>();
         this.treinos = new ArrayList<>();
         this.dietas = new ArrayList<>();
@@ -34,6 +33,10 @@ public class Usuario {
 
     // Construtor com parâmetros
     public Usuario(String nome, String email, LocalDate dataNascimento, Sexo sexo, float peso, float altura) {
+        this(nome, email, dataNascimento, sexo, peso, altura, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    }
+
+    public Usuario(String nome, String email, LocalDate dataNascimento, Sexo sexo, float peso, float altura, ArrayList<Meta> metas, ArrayList<Treino> treinos, ArrayList<Dieta> dietas) {
         this.id = UUID.randomUUID();
         this.nome = nome;
         this.email = email;
@@ -41,11 +44,12 @@ public class Usuario {
         this.sexo = sexo;
         this.peso = peso;
         this.altura = altura;
-        calcularIMC();
-        this.metas = new ArrayList<>();
-        this.treinos = new ArrayList<>();
-        this.dietas = new ArrayList<>();
+        this.metas = metas;
+        this.treinos = treinos;
+        this.dietas = dietas;
     }
+
+
 
     // Getters
     public UUID getId() {
@@ -95,12 +99,10 @@ public class Usuario {
     // Setters
     public void setAltura(float altura) {
         this.altura = altura;
-        calcularIMC(); // Recalcula o IMC após alterar a altura
     }
 
     public void setPeso(float peso) {
         this.peso = peso;
-        calcularIMC(); // Recalcula o IMC após alterar o peso
     }
 
     public void setSexo(Sexo sexo) {
@@ -119,118 +121,19 @@ public class Usuario {
         this.nome = nome;
     }
 
-    // OUTROS MÉTODOS
-    // Método para atualizar os dados do usuário, ele testa com um if se os dados fornecidos mudaram
-    public void atualizarDados(String nome, String email, LocalDate dataNascimento,
-                               Sexo sexo, float peso, float altura) {
-        if (nome != null) {
-            this.nome = nome;
-        }
-
-        if (email != null) {
-            this.email = email;
-        }
-
-        if (dataNascimento != null) {
-            this.dataNascimento = dataNascimento;
-        }
-
-        if (sexo != null) {
-            this.sexo = sexo;
-        }
-
-        if (peso > 0) {
-            this.peso = peso;
-        }
-
-        if (altura > 0) {
-            this.altura = altura;
-        }
-
-        calcularIMC(); // Recalcula o IMC após alterar peso e altura
+    public void setImc(float imc) {
+        this.imc = imc;
     }
 
-    // Método para calcular o IMC do usuário
-    public float calcularIMC() {
-        if (altura > 0) {
-            this.imc = peso / (altura * altura); // IMC = peso / altura²
-            return this.imc;
-        }
-        throw new IllegalArgumentException("Altura e peso devem ser maiores que zero.");
+    public void setMetas(ArrayList<Meta> metas) {
+        this.metas = metas;
     }
 
-    // Método para cadastrar uma meta para o usuário
-    public void cadastrarMeta(Meta meta) {
-        // Adiciona a meta à lista se ela não for nula e não existir na lista
-        if (meta != null && !metas.contains(meta)) {
-            metas.add(meta);
-        }
+    public void setTreinos(ArrayList<Treino> treinos) {
+        this.treinos = treinos;
     }
 
-    // Método para adicionar um treino para o usuário
-    public void adicionarTreino(Treino treino) {
-        // Adiciona o treino à lista se ele não for nulo e não existir na lista
-        if (treino != null && !treinos.contains(treino)) {
-            treinos.add(treino);
-        }
-    }
-
-    // Método para adicionar uma dieta para o usuário
-    public void adicionarDieta(Dieta dieta) {
-        if (dieta != null && !dietas.contains(dieta)) {
-            dietas.add(dieta);
-        }
-    }
-
-    // Método para calcular o progresso geral do usuário
-    public double getProgresso() {
-        double progressoTotal = 0; // Essa variável vai acompanhar o progresso das atividades
-        int contadorAtividades = 0; // Só contabiliza as atividades
-
-        // Calcula o progresso das metas
-        for (Meta meta : metas) {
-            progressoTotal += meta.getProgresso();
-            contadorAtividades++;
-        }
-
-        // Calcula o progresso dos treinos
-        for (Treino treino : treinos) {
-            progressoTotal += treino.getProgresso();
-            contadorAtividades++;
-        }
-
-        // Calcula o progresso das dietas
-        for (Dieta dieta : dietas) {
-            progressoTotal += dieta.getProgresso();
-            contadorAtividades++;
-        }
-
-        // Calcula a média do progresso e retorna
-        return contadorAtividades > 0 ?
-                progressoTotal / contadorAtividades : 0;
-    }
-
-    // Método para calcular a idade do usuário
-    public int getIdade() {
-        if (dataNascimento == null) {
-            return 0; // Retorna 0 se a data não existe.
-        }
-
-        // Usa Period para calcular a idade
-        return Period.between(dataNascimento, LocalDate.now()).getYears();
-    }
-
-    // Método toString
-    @Override
-    public String toString() {
-        return "negocio.Usuario{" +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", idade=" + getIdade() +
-                ", sexo=" + sexo +
-                ", peso=" + peso +
-                ", altura=" + altura +
-                ", imc=" + String.format("%.2f", imc) +
-                '}';
+    public void setDietas(ArrayList<Dieta> dietas) {
+        this.dietas = dietas;
     }
 }
