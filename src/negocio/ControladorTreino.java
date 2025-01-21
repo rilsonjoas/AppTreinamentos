@@ -1,81 +1,60 @@
 package negocio;
-import dados.RepositorioTreinosArray;
-import excecoes.TreinoNaoEncontradoException;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 
 public class ControladorTreino {
 
-    private RepositorioTreinosArray repositorio;
-    private  Treino treino;
+    // Construtor com parâmetros
+    public void inicializar(Treino treino, String nome, String tipoDeTreino, int duracao,
+            int nivelDeDificuldade, Usuario usuario) {
 
-
-    private UUID id;
-    private String nome;
-    private String tipoDeTreino;
-    private int duracao;
-    private int nivelDeDificuldade;
-    ArrayList<Exercicio> exercicios ;
-
-    private double caloriasQueimadas;
-    private double progresso;
-    private boolean concluido;
-
-    public ControladorTreino(Treino treino) throws TreinoNaoEncontradoException {
-        repositorio = RepositorioTreinosArray.getInstanciaUnica();
-        this.treino = repositorio.buscar(treino.getId());
-        exercicios = treino.getExercicios();
-
-    }
-
-    public void removerExercicio(Exercicio exercicio) {
-        if (exercicios.remove(exercicio)) {
-            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
-            atualizarProgresso(); // Atualiza o progresso do treino
-        }
+        treino.setNome(nome);
+        treino.setTipoDeTreino(tipoDeTreino);
+        treino.setDuracao(duracao);
+        treino.setNivelDeDificuldade(nivelDeDificuldade);
+        treino.setUsuario(usuario);
     }
 
     // Método para adicionar um exercício ao treino
-    public void adicionarExercicio(Exercicio exercicio) {
-        if (exercicio != null && !exercicios.contains(exercicio)) {
-            exercicios.add(exercicio);
-            calcularCaloriasQueimadas(); // Recalcula as calorias queimadas
-            atualizarProgresso(); // Atualiza o progresso do treino
+    public void adicionarExercicio(Treino treino, Exercicio exercicio) {
+        if (exercicio != null && !treino.getExercicios().contains(exercicio)) {
+            treino.getExercicios().add(exercicio);
+            calcularCaloriasQueimadas(treino); // Recalcula as calorias queimadas
+            atualizarProgresso(treino); // Atualiza o progresso do treino
         }
     }
 
+    // Método para remover um exercício do treino
+    public void removerExercicio(Treino treino, Exercicio exercicio) {
+        if (treino.getExercicios().remove(exercicio)) {
+            calcularCaloriasQueimadas(treino); // Recalcula as calorias queimadas
+            atualizarProgresso(treino); // Atualiza o progresso do treino
+        }
+    }
 
     // Método para calcular as calorias queimadas no treino
-    public double calcularCaloriasQueimadas() {
-        caloriasQueimadas = 0; // Inicializa as calorias queimadas
-        for (Exercicio exercicio : exercicios) {
-            caloriasQueimadas += exercicio.calcularCaloriasQueimadas();
+    public double calcularCaloriasQueimadas(Treino treino) {
+        double caloriasQueimadas = 0;
+        for (Exercicio exercicio : treino.getExercicios()) {
+            ControladorExercicio ce = new ControladorExercicio();
+            caloriasQueimadas += ce.calcularCaloriasQueimadas(exercicio);
         }
+        treino.setCaloriasQueimadas(caloriasQueimadas);
         return caloriasQueimadas;
     }
 
-    public void atualizarProgresso() {
-
-        //Verificação se o execício não começou, se sim, o progresso é zero e ele não está concluído.
-        if (exercicios.isEmpty()) {
-            progresso = 0.0;
-            concluido = false;
+    // Método para atualizar o progresso do treino
+    public void atualizarProgresso(Treino treino) {
+        if (treino.getExercicios().isEmpty()) {
+            treino.setProgresso(0.0);
+            treino.setConcluido(false);
             return;
         }
 
-        // Conta a quantidade de exercícios concluídos
-        long exerciciosConcluidos = 0;
-        for (Exercicio exercicio : exercicios) {
-            if (exercicio.isConcluido()) {
-                exerciciosConcluidos++;
-            }
-        }
-
-        // Calcula o progresso com base nos exercícios concluídos
-        // Calcula o progresso com base nos exercícios concluídos
-        progresso = (exerciciosConcluidos / (double) exercicios.size()) * 100.0;
-        concluido = progresso == 100.0; // Treino como concluído se o progresso for 100%
+        long exerciciosConcluidos = treino.getExercicios().stream().filter(Exercicio::isConcluido).count();
+        double progresso = (exerciciosConcluidos / (double) treino.getExercicios().size()) * 100.0;
+        treino.setProgresso(progresso);
+        treino.setConcluido(progresso == 100.0);
     }
 
 }
